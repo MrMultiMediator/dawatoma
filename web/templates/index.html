@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head>
+    <title>Home page</title>
+    </head>
+    <body>
+        <h1>Home Page!</h1>
+        <p>Hello {{content}} and welcome to my home page.</p>
+        <!-- Python code inside of HTML! -->
+        {% for q in range(10): %}
+            {% if q % 2: %}
+                <p>x = {{q}}</p>
+            {% endif %}
+        {% endfor %}
+        {% for q in cities: %}
+            <p>{{q}}
+        {% endfor %}
+    </body>
+</html>
