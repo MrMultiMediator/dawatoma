@@ -1,5 +1,3 @@
-from midiutil import MIDIFile
-
 def GenNoteDict():
     """
     Generate a dictionary that maps note strings (for example C5) to integer values of notes in

@@ -1,5 +1,5 @@
 import sys, os
-from sgen import alt2, asc, desc
+from sgen import alt2, asc, desc, rsamp
 from sequence import Sequence
 
 class FPSequence(Sequence):
@@ -26,10 +26,13 @@ class FPSequence(Sequence):
         for name in self.derseq.keys():
             self.derseq[name].write_midi()
 
-    def rsamp(self):
+    def rsamp_s(self, freq=0.5, oc1=4, oc2=6, duration=32., period=0, maxdist=8, length=8):
         """Create a sequence of notes randomly sampled from the notes in this fingerprint sequence
         in the octave range specified"""
-        return
+        name = 'rsamp_'+str(self.d_dict['rsamp'])
+        notes = self.dstring.split('\n')[1:]
+        self.derseq[name] = rsamp(name, self.melody.tempo, notes, freq=freq, oc1=oc1, oc2=oc2, duration=duration, period=period, maxdist=maxdist, length=length)
+        self.d_dict['rsamp'] += 1
 
     def alt2_s(self, freq=1, oc1=5, oc2=5, duration=12):
         """Create a sequence of two notes alternating at the specified frequency in beats.
@@ -58,6 +61,12 @@ if __name__ == '__main__':
     seq1.write_midi()
     print(seq1.is_fprint)
     seq1.alt2_s()
+    #seq1.derseq['alt2_0'].gen_midi()
+    #seq1.derseq['alt2_0'].write_midi()
     seq1.asc_s()
     seq1.desc_s()
+    seq1.rsamp_s()
+    seq1.gen_all_midi()
+    seq1.write_all_midi()
     #os.system('fluidsynth -i -a alsa ~/code/python/music/soundfonts/Ultima*/000_Florestan_Piano.sf2 '+sys.argv[1].split('.')[0]+'.mid')
+    # THERE ARE FOUR BEATS IN A NOTE

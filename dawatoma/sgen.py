@@ -5,6 +5,7 @@ for agreeable melodies to include in their track to make it more complex and
 layered.
 """
 from sequence import Sequence
+from note_dict import GenNoteDict
 import random
 
 def two_unique_notes(notes):
@@ -72,6 +73,36 @@ def alt2(name, tempo, notes, freq: "beats", oc1, oc2, duration: "beats") -> Sequ
 
     return Sequence(d_string, name)
 
+def gen_d_string_from_notes(notes, freq=0.5, duration=16, period=0, is_cyclic=True):
+    """Generate a dawa string from a list of notes. If is_cyclic, cycle thru
+    the list until the desired duration has been reached"""
+    time = 0.
+    periods = 0.
+    d_string = ''
+    index = 0
+
+    while (periods*period)+time+freq < duration:
+        if index >= len(notes):
+            if is_cyclic:
+                index = 0
+            else:
+                return d_string
+
+        d_string += '\n'+notes[index]+' '+str((periods*period)+time)+' '+str(freq)
+
+        time += freq
+
+        if time > period and period > 0:
+            index = 0
+            periods += 1.
+            time -= period
+        else:
+            index += 1
+
+    return d_string
+
+
+
 def get_ad_note_order(note1, direction = 'asc'):
     "Return an ascending or descending order of notes that starts with note1, rather than 'C'"
     if direction == 'asc':
@@ -138,7 +169,7 @@ def gen_ad_d_string(ad_notes, freq, duration, period, da_prob):
 
         time += freq
 
-        if time > period:
+        if time > period and period > 0:
             index = 0
             periods += 1.
             time -= period
@@ -162,7 +193,7 @@ def asc(name, tempo, notes, freq: "beats"=0.5, oc=4, duration: "beats"=16., peri
     duration : Length of the desired sequence in beats
     period : Number of beats per ascending subsequence. Once this is reached, start at the bottom again.
     note1 : First note to be used in the sequence. It will ascend from there
-    dec_prob : Probability (0 to 1) that the sequence will descend rather than ascend from one note to the other
+    dec_prob : Probability (0 to 1) that the sequence will descend rather than ascend from one note to another
     LINEARITY : An idea for a parameter (or two) that determine(s) the odds that a note is skipped in a sequence
     """
     asc_notes = [] # All notes to be sampled
@@ -215,3 +246,64 @@ def desc(name, tempo, notes, freq: "beats"=0.5, oc=4, duration: "beats"=16., per
     d_string = str(tempo)+gen_ad_d_string(desc_notes, freq, duration, period, asc_prob)
 
     return Sequence(d_string, name)
+
+
+
+def sample_random_notes(u_notes, oc1, oc2, maxdist, length):
+    """Sample random notes from u_notes (unique notes) using in the range of
+    octaves 1 and 2. This will return a list of notes (i.e. [C5, G6, D#5, ...])
+    that can later be used. To create a .dawa string.
+    --------------------------------------------------------------------------
+    u_notes : Unique notes without octaves
+    oc1     : Lower octave
+    oc2     : Upper octave
+    maxdist : Maximum distance between consecutive notes in the sequence.
+    length  : Number of random notes to generate.
+    """
+    # notes = ['B', 'A#', 'A', 'G#', 'G', 'F#', 'F', 'E', 'D#', 'D', 'C#', 'C']
+
+    note_dict = GenNoteDict()
+    octaves = list(range(oc1,oc2+1))
+    r_notes = [random.choice(u_notes)+str(random.choice(octaves))] # First element added
+
+    while len(r_notes) < length:
+
+        while True:
+            note = random.choice(u_notes)
+            oc = random.choice(octaves)
+            new_note = note+str(oc)
+
+            if abs(note_dict[new_note] - note_dict[r_notes[-1]]) < maxdist:
+                break
+
+        r_notes.append(new_note)
+
+    return r_notes
+
+def rsamp(name, tempo, notes, freq: "beats"=0.5, oc1=4, oc2=6, duration: "beats"=16., period: "beats"=0, maxdist=8, length=8):
+    """
+    Return a sequence of notes randomly sampled from the notes passed in in the octave range specified
+    ---------------------------------------------------------------------------------------------------------
+    name : The corresponding name for a .midi or .dawa file that could be written from the generated sequence
+    tempo : Tempo in beats/minute
+    notes : Notes in .dawa format split by line excluding the header line
+    freq : The length of each note in the Sequence.
+    oc1  : Lower octave
+    oc2  : Upper octave
+    duration : Length of the desired sequence in beats
+    period : Number of beats per descending subsequence. Once this is reached, start at the bottom again.
+    maxdist : Maximum distance between consecutive notes in the sequence. You don't want the sequence jumping
+              from like D3 to G7 or whatever
+    length : Number of random notes to generate. These will be written over and over until the duration is reached.
+             Eeach note lasts for 'freq' amount of time in beats. The duration is also in beats.
+    """
+    if oc2 < oc1:
+        raise ValueError("ERROR! Octave 2 (oc2) must be greater than or equal to Octave 1 (oc1)")
+    un = get_unique_notes(notes)
+
+    r_notes = sample_random_notes(un, oc1=oc1, oc2=oc2, maxdist=maxdist, length=length)
+
+    d_string = str(tempo)+gen_d_string_from_notes(r_notes, freq=freq, duration=duration, period=period)
+
+    return Sequence(d_string, name)
+
