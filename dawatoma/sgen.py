@@ -205,6 +205,8 @@ def asc(name, tempo, notes, freq: "beats"=0.5, oc=4, duration: "beats"=16., peri
     dec_prob : Probability (0 to 1) that the sequence will descend rather than ascend from one note to another
     LINEARITY : An idea for a parameter (or two) that determine(s) the odds that a note is skipped in a sequence
     """
+    print(running_msg.format("asc"))
+
     asc_notes = [] # All notes to be sampled
     un = get_unique_notes(notes)
 
@@ -220,6 +222,8 @@ def asc(name, tempo, notes, freq: "beats"=0.5, oc=4, duration: "beats"=16., peri
     note = note1
     asc_notes = get_ad_notes(note1, un_order, oc, direction = 'asc')
     d_string = str(tempo)+gen_ad_d_string(asc_notes, freq, duration, period, dec_prob)
+
+    print(complete_msg.format("asc"))
 
     return Sequence(d_string, name)
 
@@ -238,6 +242,8 @@ def desc(name, tempo, notes, freq: "beats"=0.5, oc=4, duration: "beats"=16., per
     dec_prob : Probability (0 to 1) that the sequence will ascend rather than descend from one note to the other
     LINEARITY : An idea for a parameter (or two) that determine(s) the odds that a note is skipped in a sequence
     """
+    print(running_msg.format("desc"))
+
     desc_notes = [] # All notes to be sampled
     un = get_unique_notes(notes)
 
@@ -253,6 +259,8 @@ def desc(name, tempo, notes, freq: "beats"=0.5, oc=4, duration: "beats"=16., per
     note = note1
     desc_notes = get_ad_notes(note1, un_order, oc, direction = 'desc')
     d_string = str(tempo)+gen_ad_d_string(desc_notes, freq, duration, period, asc_prob)
+
+    print(complete_msg.format("desc"))
 
     return Sequence(d_string, name)
 
@@ -308,11 +316,16 @@ def rsamp(name, tempo, notes, freq: "beats"=0.5, oc1=4, oc2=6, duration: "beats"
     """
     if oc2 < oc1:
         raise ValueError("ERROR! Octave 2 (oc2) must be greater than or equal to Octave 1 (oc1)")
+ 
+    print(running_msg.format("rsamp"))
+
     un = get_unique_notes(notes)
 
     r_notes = sample_random_notes(un, oc1=oc1, oc2=oc2, maxdist=maxdist, length=length)
 
     d_string = str(tempo)+gen_d_string_from_notes(r_notes, freq=freq, duration=duration, period=period)
+
+    print(complete_msg.format("rsamp"))
 
     return Sequence(d_string, name)
 
