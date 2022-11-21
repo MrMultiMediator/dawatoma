@@ -65,7 +65,7 @@ if __name__ == '__main__':
     #seq1.derseq['alt2_0'].write_midi()
     seq1.asc_s()
     seq1.desc_s()
-    seq1.rsamp_s()
+    seq1.rsamp_s(length=12)
     seq1.gen_all_midi()
     seq1.write_all_midi()
     #os.system('fluidsynth -i -a alsa ~/code/python/music/soundfonts/Ultima*/000_Florestan_Piano.sf2 '+sys.argv[1].split('.')[0]+'.mid')

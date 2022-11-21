@@ -8,73 +8,13 @@ from sequence import Sequence
 from note_dict import GenNoteDict
 import random
 
-def two_unique_notes(notes):
-    "See if a list of notes in .dawa format contains at least 2 unique notes. If yes, return True. If no, return False."
-    n1 = notes[0].split()[0][:-1]
-
-    for note in notes[1:]:
-        if note.split()[0][:-1] != n1:
-            return True
-
-    return False
-
-def get_unique_notes(notes, show=False):
-    "Get all unique notes in the .dawa sequence. Ignore the octave."
-    un = []
-
-    for note in notes:
-        if note.split()[0][:-1] not in un:
-            un.append(note.split()[0][:-1])
-
-    if show:
-        print(f"{len(un)} unique notes : {un}")
-
-    return un
-
-def alt2(name, tempo, notes, freq: "beats", oc1, oc2, duration: "beats") -> Sequence:
-    """
-    Return a sequence of two notes alternating at the specified frequency in beats.
-    Sample from the notes passed in to the function, and use the octaves specified.
-    ---------------------------------------------------------------------------------------------------------
-    name : The corresponding name for a .midi or .dawa file that could be written from the generated sequence
-    tempo : Tempo in beats/minute
-    notes : Notes in .dawa format split by line excluding the header line
-    freq : Period between notes in beats
-    oc1 : Octave 1
-    oc2 : Octave 2
-    duration : Length of the desired sequence in beats
-    """
-    try:
-        test = notes[1]
-    except:
-        raise ValueError("ERROR! There must be more than 1 note in a sequence to use alt2")
-        return
-
-    if not two_unique_notes(notes):
-        raise ValueError("ERROR! There must be at least two unique notes to use alt2")
-        return
-
-    un = get_unique_notes(notes, True)
-
-    d_string = str(tempo)
-    note1 = un.pop(un.index(random.choice(un)))+str(oc1)
-    note2 = un.pop(un.index(random.choice(un)))+str(oc2)
-    time = 0.
-    counter = 0
-
-    # alt2 main algorithm
-    while time+freq <= duration:
-        if counter % 2 == 0:
-            d_string += '\n'+note1+' '+str(time)+' '+str(freq)
-        else:
-            d_string += '\n'+note2+' '+str(time)+' '+str(freq)
-        counter += 1
-        time += freq
-
-    return Sequence(d_string, name)
+running_msg = ("\nGenerating derived sequence from fingerprint sequence via "
+               "'{}' function...\n")
+complete_msg = ("\nCompleted running {} function. Returning derived sequence "
+               "object\n")
 
 def gen_d_string_from_notes(notes, freq=0.5, duration=16, period=0, is_cyclic=True):
-    """Generate a dawa string from a list of notes. If is_cyclic, cycle thru
+    """Generate a .dawa string from a list of notes. If is_cyclic, cycle thru
     the list until the desired duration has been reached"""
     time = 0.
     periods = 0.
@@ -100,6 +40,75 @@ def gen_d_string_from_notes(notes, freq=0.5, duration=16, period=0, is_cyclic=Tr
             index += 1
 
     return d_string
+
+def get_unique_notes(notes, show=False):
+    "Get all unique notes in the .dawa sequence. Ignore the octave."
+    un = []
+
+    for note in notes:
+        if note.split()[0][:-1] not in un:
+            un.append(note.split()[0][:-1])
+
+    if show:
+        print(f"{len(un)} unique notes : {un}")
+
+    return un
+
+def two_unique_notes(notes):
+    "See if a list of notes in .dawa format contains at least 2 unique notes. If yes, return True. If no, return False."
+    n1 = notes[0].split()[0][:-1]
+
+    for note in notes[1:]:
+        if note.split()[0][:-1] != n1:
+            return True
+
+    return False
+
+def alt2(name, tempo, notes, freq: "beats", oc1, oc2, duration: "beats") -> Sequence:
+    """
+    Return a sequence of two notes alternating at the specified frequency in beats.
+    Sample from the notes passed in to the function, and use the octaves specified.
+    ---------------------------------------------------------------------------------------------------------
+    name : The corresponding name for a .midi or .dawa file that could be written from the generated sequence
+    tempo : Tempo in beats/minute
+    notes : Notes in .dawa format split by line excluding the header line
+    freq : Period between notes in beats
+    oc1 : Octave 1
+    oc2 : Octave 2
+    duration : Length of the desired sequence in beats
+    """
+    try:
+        test = notes[1]
+    except:
+        raise ValueError("ERROR! There must be more than 1 note in a sequence to use alt2")
+        return
+
+    if not two_unique_notes(notes):
+        raise ValueError("ERROR! There must be at least two unique notes to use alt2")
+        return
+
+    print(running_msg.format("alt2"))
+
+    un = get_unique_notes(notes, True)
+
+    d_string = str(tempo)
+    note1 = un.pop(un.index(random.choice(un)))+str(oc1)
+    note2 = un.pop(un.index(random.choice(un)))+str(oc2)
+    time = 0.
+    counter = 0
+
+    # alt2 main algorithm
+    while time+freq <= duration:
+        if counter % 2 == 0:
+            d_string += '\n'+note1+' '+str(time)+' '+str(freq)
+        else:
+            d_string += '\n'+note2+' '+str(time)+' '+str(freq)
+        counter += 1
+        time += freq
+
+    print(complete_msg.format("alt2"))
+
+    return Sequence(d_string, name)
 
 
 

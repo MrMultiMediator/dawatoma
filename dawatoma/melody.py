@@ -17,7 +17,7 @@ class Melody:
         self.midi.addTempo(self.track, 0, self.tempo)
 
         for i, note in enumerate(notes):
-            print(note)
+            # print(note)
             pitch = NoteDict[note.split()[0]]
             time = float(note.split()[1])
             duration = float(note.split()[2])
