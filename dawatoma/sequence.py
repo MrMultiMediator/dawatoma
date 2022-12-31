@@ -4,10 +4,27 @@ from melody import Melody
 @attr.s
 class Sequence:
     """
-    dstring : The .dawa string (the contents of a .dawa file or something that can be converted to that)
-    name : The corresponding name for a .midi or .dawa file that could be written from this sequence
-    melody : A Melody object containing all the information necessary to create a .midi file
-    is_fprint : This is the base class and is not a fingerprint sequence (is_fprint = False)
+    A Sequence is a container that holds all the relevant objects and metadata that
+    allow one to work with note sequences.
+
+    Attributes
+    ----------
+    
+    dstring : str
+        The .dawa string (the contents of a .dawa file or something that can
+        be converted to that).
+
+    name : str
+        The corresponding name for a .midi or .dawa file that could be written
+        from this sequence
+
+    melody : Melody
+        A Melody object containing all the information necessary to create a
+        .midi file
+
+    is_fprint : bool
+        This is the base class and is not a fingerprint sequence
+        (is_fprint = False)
     """
     dstring = attr.ib()
     name = attr.ib()

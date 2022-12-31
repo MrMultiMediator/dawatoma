@@ -3,13 +3,21 @@ from midiutil import MIDIFile
 
 class Melody:
     """
-    MIDIFile objects created from a string that encodes all melody information in the following format:
+    A Melody is an object that implements the functionality of converting a .dawa string
+    into a .midi file.
+
+    .dawa strings have the following format containing all note sequence information:
     tempo_in_BPM # Commment
     note1 time duration
     note2 time duration
     ...
     noteN time duration
-    Time and duration are in beats. The note is a string like C5 which will be interpreted with the NoteDict"""
+    Time and duration are in beats. The note is a string like C5 which will be interpreted with the NoteDict
+
+    A Melody is generated in __attrs_post_init__ in the Sequence class as one of its
+    member objects, where it receives the .dawa string "self.dstring" here.
+    
+    """
     def gen_midi(self) -> 'MIDIFile':
         "Generate the midiutil object that stores everything needed to write a midi file with the melody."
         notes = self.dstring[1:]

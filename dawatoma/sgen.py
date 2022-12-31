@@ -1,8 +1,9 @@
 """
-Sequence generation routines. Fingerprint sequences use these to generate other
-derived sequences. This can be used by artists with writer's block to get ideas
-for agreeable melodies to include in their track to make it more complex and
-layered.
+This module contains sequence generation routines.
+
+Fingerprint sequences use these routines to generate other derived sequences.
+This can be used by artists with writer's block to get ideas for agreeable
+melodies to include in their track to make it more complex and layered.
 """
 from sequence import Sequence
 from note_dict import GenNoteDict
@@ -15,7 +16,9 @@ complete_msg = ("\nCompleted running {} function. Returning derived sequence "
 
 def gen_d_string_from_notes(notes, freq=0.5, duration=16, period=0, is_cyclic=True):
     """Generate a .dawa string from a list of notes. If is_cyclic, cycle thru
-    the list until the desired duration has been reached"""
+    the list until the desired duration has been reached
+
+    """
     time = 0.
     periods = 0.
     d_string = ''
@@ -55,7 +58,10 @@ def get_unique_notes(notes, show=False):
     return un
 
 def two_unique_notes(notes):
-    "See if a list of notes in .dawa format contains at least 2 unique notes. If yes, return True. If no, return False."
+    """See if a list of notes in .dawa format contains at least 2 unique
+    notes. If yes, return True. If no, return False.
+
+    """
     n1 = notes[0].split()[0][:-1]
 
     for note in notes[1:]:
@@ -65,17 +71,28 @@ def two_unique_notes(notes):
     return False
 
 def alt2(name, tempo, notes, freq: "beats", oc1, oc2, duration: "beats") -> Sequence:
-    """
-    Return a sequence of two notes alternating at the specified frequency in beats.
-    Sample from the notes passed in to the function, and use the octaves specified.
-    ---------------------------------------------------------------------------------------------------------
-    name : The corresponding name for a .midi or .dawa file that could be written from the generated sequence
-    tempo : Tempo in beats/minute
-    notes : Notes in .dawa format split by line excluding the header line
-    freq : Period between notes in beats
-    oc1 : Octave 1
-    oc2 : Octave 2
-    duration : Length of the desired sequence in beats
+    """Return a sequence of two notes alternating at the specified frequency
+    in beats. Sample from the notes passed in to the function, and use the
+    octaves specified.
+
+    Parameters
+    ----------
+    name : str
+        The corresponding name for a .midi or .dawa file that could be written
+        from the generated sequence
+    tempo : int
+        Tempo in beats/minute
+    notes : list
+        Notes in .dawa format split by line excluding the header line
+    freq : float
+        Period between notes in beats
+    oc1 : int
+        Octave 1
+    oc2 : int
+        Octave 2
+    duration : float
+        Length of the desired sequence in beats
+
     """
     try:
         test = notes[1]
@@ -113,7 +130,10 @@ def alt2(name, tempo, notes, freq: "beats", oc1, oc2, duration: "beats") -> Sequ
 
 
 def get_ad_note_order(note1, direction = 'asc'):
-    "Return an ascending or descending order of notes that starts with note1, rather than 'C'"
+    """Return an ascending or descending order of notes that starts with
+    note1, rather than 'C'
+
+    """
     if direction == 'asc':
         octave = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
     else:
@@ -129,9 +149,11 @@ def get_ad_note_order(note1, direction = 'asc'):
     return note_order
 
 def get_ad_notes(note, un_order, oc, direction = 'asc'):
-    """Generate a list of ascending or descending (a/d) notes (i.e. A#4, B4, C5, ...) using only the unique
-    notes in un_order, starting at note and going no further than B8 (for 'asc') and no further than
-    C0 (for 'desc')"""
+    """Generate a list of ascending or descending (a/d) notes (i.e. A#4, B4,
+    C5, ...) using only the unique notes in un_order, starting at note and
+    going no further than B8 (for 'asc') and no further than C0 (for 'desc')
+
+    """
     if direction == 'asc':
         octave = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
     elif direction == 'desc':
@@ -166,8 +188,11 @@ def get_ad_notes(note, un_order, oc, direction = 'asc'):
     return ad_notes
 
 def gen_ad_d_string(ad_notes, freq, duration, period, da_prob):
-    """Generate a .dawa string (missing the header line) of ascending or descending (a/d=ad) notes given the
-    parameters. Parameters are explained in the 'asc' and 'desc' function documentation."""
+    """Generate a .dawa string (missing the header line) of ascending or
+    descending (a/d=ad) notes given the parameters. Parameters are explained
+    in the 'asc' and 'desc' function documentation.
+
+    """
     time = 0.
     periods = 0.
     d_string = ''
@@ -191,19 +216,38 @@ def gen_ad_d_string(ad_notes, freq, duration, period, da_prob):
     return d_string
 
 def asc(name, tempo, notes, freq: "beats"=0.5, oc=4, duration: "beats"=16., period: "beats"=4., note1=None, dec_prob=0.) -> Sequence:
-    """
-    Return a series of ascending notes as a Sequence to the length of time specified (duration).
-    ---------------------------------------------------------------------------------------------------------
-    name : The corresponding name for a .midi or .dawa file that could be written from the generated sequence
-    tempo : Tempo in beats/minute
-    notes : Notes in .dawa format split by line excluding the header line
-    freq : The length of each note in the Sequence.
-    oc : Octave of the starting note
-    duration : Length of the desired sequence in beats
-    period : Number of beats per ascending subsequence. Once this is reached, start at the bottom again.
-    note1 : First note to be used in the sequence. It will ascend from there
-    dec_prob : Probability (0 to 1) that the sequence will descend rather than ascend from one note to another
-    LINEARITY : An idea for a parameter (or two) that determine(s) the odds that a note is skipped in a sequence
+    """Return a series of ascending notes as a Sequence to the length of time
+    specified (duration).
+
+    Parameters
+    ----------
+    name : str
+        The corresponding name for a .midi or .dawa file that could be written
+        from the generated sequence
+    tempo : int
+        Tempo in beats/minute
+    notes : list
+        Notes in .dawa format split by line excluding the header line
+    freq : float
+        The length of each note in the Sequence.
+    oc : int
+        Octave of the starting note
+    duration : float
+        Length of the desired sequence in beats
+    period : float
+        Number of beats per ascending subsequence. Once this is reached, start
+        at the bottom again.
+    note1 : str
+        First note to be used in the sequence. It will ascend from there
+    dec_prob : float
+        Probability (0 to 1) that the sequence will descend rather than ascend
+        from one note to another
+
+    Notes
+    -----
+        LINEARITY : An idea for a parameter (or two) that determine(s) the
+        odds that a note is skipped in a sequence
+
     """
     print(running_msg.format("asc"))
 
@@ -228,19 +272,38 @@ def asc(name, tempo, notes, freq: "beats"=0.5, oc=4, duration: "beats"=16., peri
     return Sequence(d_string, name)
 
 def desc(name, tempo, notes, freq: "beats"=0.5, oc=4, duration: "beats"=16., period: "beats"=4., note1=None, asc_prob=0.) -> Sequence:
-    """
-    Return a series of descending notes as a Sequence to the length of time specified (duration).
-    ---------------------------------------------------------------------------------------------------------
-    name : The corresponding name for a .midi or .dawa file that could be written from the generated sequence
-    tempo : Tempo in beats/minute
-    notes : Notes in .dawa format split by line excluding the header line
-    freq : The length of each note in the Sequence.
-    oc : Octave of the starting note
-    duration : Length of the desired sequence in beats
-    period : Number of beats per descending subsequence. Once this is reached, start at the bottom again.
-    note1 : First note to be used in the sequence. It will descend from there
-    dec_prob : Probability (0 to 1) that the sequence will ascend rather than descend from one note to the other
-    LINEARITY : An idea for a parameter (or two) that determine(s) the odds that a note is skipped in a sequence
+    """Return a series of descending notes as a Sequence to the length of time
+    specified (duration).
+
+    Parameters
+    ----------
+    name : str
+        The corresponding name for a .midi or .dawa file that could be written
+        from the generated sequence.
+    tempo : int
+        Tempo in beats/minute
+    notes : list
+        Notes in .dawa format split by line excluding the header line
+    freq : float
+        The length of each note in the Sequence.
+    oc : int
+        Octave of the starting note
+    duration : float
+        Length of the desired sequence in beats
+    period : float
+        Number of beats per descending subsequence. Once this is reached,
+        start at the bottom again.
+    note1 : str
+        First note to be used in the sequence. It will descend from there
+    dec_prob : float
+        Probability (0 to 1) that the sequence will ascend rather than descend
+        from one note to the other
+
+    Notes
+    -----
+        LINEARITY : An idea for a parameter (or two) that determine(s) the
+        odds that a note is skipped in a sequence
+        
     """
     print(running_msg.format("desc"))
 
@@ -268,14 +331,27 @@ def desc(name, tempo, notes, freq: "beats"=0.5, oc=4, duration: "beats"=16., per
 
 def sample_random_notes(u_notes, oc1, oc2, maxdist, length):
     """Sample random notes from u_notes (unique notes) using in the range of
-    octaves 1 and 2. This will return a list of notes (i.e. [C5, G6, D#5, ...])
-    that can later be used. To create a .dawa string.
-    --------------------------------------------------------------------------
-    u_notes : Unique notes without octaves
-    oc1     : Lower octave
-    oc2     : Upper octave
-    maxdist : Maximum distance between consecutive notes in the sequence.
-    length  : Number of random notes to generate.
+    octaves 1 and 2.
+
+    Parameters
+    ----------
+    u_notes : list
+        Unique notes without octaves
+    oc1 : int
+        Lower octave
+    oc2 : int
+        Upper octave
+    maxdist : int
+        Maximum distance between consecutive notes in the sequence.
+    length : int
+        Number of random notes to generate.
+
+    Returns
+    -------
+    list
+        This will return a list of notes (i.e. [C5, G6, D#5, ...])
+        that can later be used. To create a .dawa string.
+
     """
     # notes = ['B', 'A#', 'A', 'G#', 'G', 'F#', 'F', 'E', 'D#', 'D', 'C#', 'C']
 
@@ -298,21 +374,37 @@ def sample_random_notes(u_notes, oc1, oc2, maxdist, length):
     return r_notes
 
 def rsamp(name, tempo, notes, freq: "beats"=0.5, oc1=4, oc2=6, duration: "beats"=16., period: "beats"=0, maxdist=8, length=8):
-    """
-    Return a sequence of notes randomly sampled from the notes passed in in the octave range specified
-    ---------------------------------------------------------------------------------------------------------
-    name : The corresponding name for a .midi or .dawa file that could be written from the generated sequence
-    tempo : Tempo in beats/minute
-    notes : Notes in .dawa format split by line excluding the header line
-    freq : The length of each note in the Sequence.
-    oc1  : Lower octave
-    oc2  : Upper octave
-    duration : Length of the desired sequence in beats
-    period : Number of beats per descending subsequence. Once this is reached, start at the bottom again.
-    maxdist : Maximum distance between consecutive notes in the sequence. You don't want the sequence jumping
-              from like D3 to G7 or whatever
-    length : Number of random notes to generate. These will be written over and over until the duration is reached.
-             Eeach note lasts for 'freq' amount of time in beats. The duration is also in beats.
+    """Return a sequence of notes randomly sampled from the notes passed in in
+    the octave range specified
+
+    Parameters
+    ----------
+    name : str
+        The corresponding name for a .midi or .dawa file that could be written
+        from the generated sequence
+    tempo : int
+        Tempo in beats/minute
+    notes : list
+        Notes in .dawa format split by line excluding the header line
+    freq : float
+        The length of each note in the Sequence.
+    oc1 : int
+        Lower octave
+    oc2 : int
+        Upper octave
+    duration : float
+        Length of the desired sequence in beats
+    period : float
+        Number of beats per descending subsequence. Once this is reached,
+        start at the bottom again.
+    maxdist : int
+        Maximum distance between consecutive notes in the sequence. You don't
+        want the sequence jumping from like D3 to G7 or whatever
+    length : int
+        Number of random notes to generate. These will be written over and
+        over until the duration is reached. Eeach note lasts for 'freq' amount
+        of time in beats. The duration is also in beats.
+
     """
     if oc2 < oc1:
         raise ValueError("ERROR! Octave 2 (oc2) must be greater than or equal to Octave 1 (oc1)")

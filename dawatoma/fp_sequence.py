@@ -3,14 +3,42 @@ from sgen import alt2, asc, desc, rsamp
 from sequence import Sequence
 
 class FPSequence(Sequence):
-    """Fingerprint sequence. d_dict : A dictionary with keys corresponding to the different types of derivations
-    that are possible, and values corresponding the total number of derived sequences there are of that type.
-    derseq = Dictionary of derived sequences. keys are names. Values are the Sequence objects.
-    TO DO:
-    1.) Make it so you can combine all (or 16 at a time) derived sequences into a single midi, with each derived
-    sequence on its own channel.
-    2.) Add functionality to convert a derived sequence into a fingerprint sequence. That is, write a function
-    that makes a copy of a derived sequence, but returns that copy as a fingerprint sequence."""
+    """
+    A fingerprint sequence is a sequence from which other sequences may be
+    derived using the various sequence derivation protocols available in this
+    package.
+
+    As an example use case, a fingerprint might be your main melody from which
+    you wish to derive additional melodies that could be overlayed at various
+    points in the song. This is the child of the base class "Sequence", and
+    has the additional functionality that allows for sequences to be derived
+    from itself. 
+
+    Attributes
+    ----------
+
+    is_fprint : bool
+        True. This allows a developer to probe whether a sequence is a fingerprint
+        sequence or not. This variable is set to False for base class "Sequence".
+
+    d_dict : dict
+        A dictionary with keys corresponding to the different types of
+        derivations that are possible, and values corresponding the current
+        total number of derived sequences of that type.
+
+    derseq : dict
+        Dictionary of derived sequences. Keys are names. Values are the
+        Sequence objects.
+        
+    """
+
+    # Using NumPy style docstrings
+    #TO DO:
+    #1.) Make it so you can combine all (or 16 at a time) derived sequences into a single midi, with each derived
+    #sequence on its own channel.
+    #2.) Add functionality to convert a derived sequence into a fingerprint sequence. That is, write a function
+    #that makes a copy of a derived sequence, but returns that copy as a fingerprint sequence.
+
     is_fprint = True
     d_dict = {'rsamp':0, 'alt2':0, 'asc':0, 'desc':0}
     derseq = {}
