@@ -1,0 +1,14 @@
+site_name: dawatoma docs
+
+theme:
+  name: "material"
+
+plugins:
+  - mkdocstrings
+
+nav:
+  - Home: index.md # Change the page's title to "Home"
+  - tutorials.md
+  - how-to-guides.md
+  - reference.md
+  - Deep dive: explanation.md # Change the page's title to "Deep dive" from "Explanation"

@@ -54,6 +54,10 @@ class FPSequence(Sequence):
         for name in self.derseq.keys():
             self.derseq[name].write_midi()
 
+    def write_all_dawa(self):
+        for name in self.derseq.keys():
+            self.derseq[name].write_dawa()
+
     def rsamp_s(self, freq=0.5, oc1=4, oc2=6, duration=32., period=0, maxdist=8, length=8):
         """Create a sequence of notes randomly sampled from the notes in this fingerprint sequence
         in the octave range specified"""
@@ -96,5 +100,6 @@ if __name__ == '__main__':
     seq1.rsamp_s(length=12)
     seq1.gen_all_midi()
     seq1.write_all_midi()
+    seq1.write_all_dawa()
     #os.system('fluidsynth -i -a alsa ~/code/python/music/soundfonts/Ultima*/000_Florestan_Piano.sf2 '+sys.argv[1].split('.')[0]+'.mid')
     # THERE ARE FOUR BEATS IN A NOTE
