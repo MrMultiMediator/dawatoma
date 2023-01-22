@@ -6,6 +6,13 @@ theme:
 plugins:
   - mkdocstrings
 
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+
 nav:
   - Home: index.md # Change the page's title to "Home"
   - tutorials.md

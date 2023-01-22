@@ -1,5 +1,6 @@
 """
-DAWATOMA stands for Digital Audio Workstation AuTOMAtion.
+**DAWATOMA** stands for **D**igital **A**udio **W**orkstation
+**A**u**TOMA**tion.
 
 dawatoma allows the acceleration of creative tasks that often take place in a
 DAW. It allows the generation of derived melodies given a 'fingerprint' melody
@@ -31,3 +32,7 @@ interpreted with the NoteDict, also included in this package.
 This package depends on MIDIUtil.
 
 """
+
+from .fp_sequence import FPSequence, seq_constructor_args_from_file
+from .sequence import Sequence
+from .note_dict import NoteDict

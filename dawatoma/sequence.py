@@ -1,5 +1,5 @@
 import os, sys, attr
-from melody import Melody
+from .melody import Melody
 
 @attr.s
 class Sequence:

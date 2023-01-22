@@ -1,4 +1,4 @@
-from note_dict import NoteDict
+from .note_dict import NoteDict
 from midiutil import MIDIFile
 
 class Melody:

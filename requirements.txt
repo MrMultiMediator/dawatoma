@@ -1,1 +1,2 @@
-MIDIUtil
+MIDIUtil>=1.2.1
+attrs>=21.2.0

@@ -1,6 +1,12 @@
 import sys, os
-from sgen import alt2, asc, desc, rsamp
-from sequence import Sequence
+from .sgen import alt2, asc, desc, rsamp
+from .sequence import Sequence
+
+def seq_constructor_args_from_file(filename):
+    """Create the two arguments for a sequence constructor (.dawa string,
+    filename without extension) given only a .dawa filename"""
+
+    return open(filename,'r').read(), filename.split('.')[0]
 
 class FPSequence(Sequence):
     """
@@ -8,7 +14,7 @@ class FPSequence(Sequence):
     derived using the various sequence derivation protocols available in this
     package.
 
-    As an example use case, a fingerprint might be your main melody from which
+    For example, a fingerprint might be your main melody from which
     you wish to derive additional melodies that could be overlayed at various
     points in the song. This is the child of the base class "Sequence", and
     has the additional functionality that allows for sequences to be derived
@@ -16,17 +22,16 @@ class FPSequence(Sequence):
 
     Attributes
     ----------
-
-    is_fprint : bool
+    is_fprint : is_frpint (bool)
         True. This allows a developer to probe whether a sequence is a fingerprint
         sequence or not. This variable is set to False for base class "Sequence".
 
-    d_dict : dict
+    d_dict : d_dict (dict)
         A dictionary with keys corresponding to the different types of
         derivations that are possible, and values corresponding the current
         total number of derived sequences of that type.
 
-    derseq : dict
+    derseq : derseq (dict)
         Dictionary of derived sequences. Keys are names. Values are the
         Sequence objects.
         
@@ -55,6 +60,7 @@ class FPSequence(Sequence):
             self.derseq[name].write_midi()
 
     def write_all_dawa(self):
+        """Write a .dawa file for all derived sequences. They will all be called '<name>.mid'"""
         for name in self.derseq.keys():
             self.derseq[name].write_dawa()
 
@@ -88,7 +94,8 @@ class FPSequence(Sequence):
 
 if __name__ == '__main__':
     "Make a fingerprint sequence/melody from a dawa file, write it to .midi, and derive additional melodies from it."
-    seq1 = FPSequence(open(sys.argv[1],'r').read(), sys.argv[1].split('.')[0])
+    fps_args = seq_constructor_args_from_file(sys.argv[1])
+    seq1 = FPSequence(fps_args[0], fps_args[1])
     seq1.gen_midi()
     seq1.write_midi()
     print(seq1.is_fprint)

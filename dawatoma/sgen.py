@@ -5,8 +5,8 @@ Fingerprint sequences use these routines to generate other derived sequences.
 This can be used by artists with writer's block to get ideas for agreeable
 melodies to include in their track to make it more complex and layered.
 """
-from sequence import Sequence
-from note_dict import GenNoteDict
+from .sequence import Sequence
+from .note_dict import GenNoteDict
 import random
 
 running_msg = ("\nGenerating derived sequence from fingerprint sequence via "
