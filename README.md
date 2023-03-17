@@ -28,4 +28,4 @@ sequence that a note begins, and duration is how long the note lives. The
 initial strings "not1e1", "note2", etc are strings like "C5" which will be
 interpreted with the NoteDict, also included in this package.  
   
-This package depends on MIDIUtil.
+This package depends on MIDIUtil and attrs.
