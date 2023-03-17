@@ -6,7 +6,15 @@ def seq_constructor_args_from_file(filename):
     """Create the two arguments for a sequence constructor (.dawa string,
     filename without extension) given only a .dawa filename"""
 
-    return open(filename,'r').read(), filename.split('.')[0]
+    with open(filename, 'r') as f:
+        dstring = f.read()
+
+    if dstring[-1] == '\n':
+        return dstring[:-1], os.path.basename(os.path.splitext(filename)[0])
+        #return dstring[:-1], filename.split('.')[0]
+    else:
+        return dstring, os.path.basename(os.path.splittext(filename)[0])
+
 
 class FPSequence(Sequence):
     """
