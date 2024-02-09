@@ -411,7 +411,7 @@ def rsamp(name, tempo, notes, freq: "beats"=0.5, oc1=4, oc2=6, duration: "beats"
  
     print(running_msg.format("rsamp"))
 
-    un = get_unique_notes(notes)
+    un = get_unique_notes(notes, show=True)
 
     r_notes = sample_random_notes(un, oc1=oc1, oc2=oc2, maxdist=maxdist, length=length)
 
