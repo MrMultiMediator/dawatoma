@@ -29,3 +29,5 @@ initial strings "not1e1", "note2", etc are strings like "C5" which will be
 interpreted with the NoteDict, also included in this package.  
   
 This package depends on MIDIUtil and attrs.
+This package is available through PyPI via `pip install dawatoma`
+Read the docs: https://mrmultimediator.github.io/dawatoma/
